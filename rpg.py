@@ -179,11 +179,11 @@ class Monster(Game): #怪物
             if life == 'y':
                 if p.money >= 20:
                     p.money -= 20
-                    print('扣除费用20金!你复活了!')
+                    print('扣除费用20金!你现在复活了!')
                     p.blood = p.max_blood
                     p.begin_game()
                 else:
-                    sys.exit('你的钱不够!游戏结束!')
+                    sys.exit('你身上的钱不够!游戏结束!')
             else:
                 sys.exit('游戏结束!')
         else:
