@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 
 def buy():
+    global total_weight
     q = True
     o, total_price, total_weight = 0, 0, 0
     name_list, price_list, num_list, weight_list = [], [], [], []
@@ -41,9 +42,13 @@ def buy():
 def freight():
     freight_weight = [1000, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 9500, 11000, 12000, 13000, 14000, 15000,\
                       16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000, 25000, 26000, 27000, 28000]
+    freight_price = [1500, 2000, 2250, 2500, 2750, 3000, 3250, 3500, 3750, 3950, 4150, 4350, 4550, 4750,\
+                     4950, 5150, 5350, 5550, 5750, 5950, 6150, 6350, 6550, 6750, 6950, 7150, 7350]
     for i in freight_weight:
-        print(i)
+        if i > total_weight:
+            j = freight_weight.index(i)
+            print('估算出的货物重量为 %d kg. 费用大概为 %d 円.' % ((i/1000), freight_price[j]))
+            break
 
 buy()
 freight()
-
