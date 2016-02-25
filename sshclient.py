@@ -11,7 +11,8 @@ def ssh():
     if choose == 'command':
         comm = input('Enter the command: ')
         i, j, k = c.exec_command(comm)
-        print(j.readlines())
+        for x in j.readlines():
+        	print(x, end=' ')
         c.close()
     elif choose == 'ftp':
         ftp = c.open_sftp()
