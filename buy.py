@@ -20,12 +20,18 @@ def buy():
         if choose == 'y':
             print('-'*50)
             for i in range(o):
-                print(i, '名称:', name_list[i], '数量:', num_list[i], '总价格(円):', price_list[i]*num_list[i], '总重量(g):', weight_list[i]*num_list[i])
                 total_price += price_list[i]*num_list[i]
                 total_weight += weight_list[i]*num_list[i]
-            print('商品总数:', i+1, '此批货总价值(円):', total_price, '此批货总重(g):', total_weight)
-            delete = int(input('是否删除某一行(输入-1不删除任何数据): '))
+                print(i, '名称:', name_list[i], '单价(円):', price_list[i], '单重(g):', weight_list[i])
+            delete = int(input('是否删除某一行(输入-1不删除任何数据并显示详细情况): '))
             if delete == -1:
+                print('-'*50)
+                for j in range(o):
+                    print(j, '名称:', name_list[j], '数量:', num_list[j], '总价格(円):', price_list[j]*num_list[j], '总重量(g):', weight_list[j]*num_list[j], \
+                          '重量占比(%):', round(weight_list[j]*num_list[j]/total_weight, 3))
+                print('商品总数:', i+1, '此批货总价值(円):', total_price, '此批货总重(g):', total_weight)
+                freight()
+                total_price, total_weight = 0, 0
                 continue
             else:
                 name_list.pop(delete)
@@ -47,8 +53,11 @@ def freight():
     for i in freight_weight:
         if i > total_weight:
             j = freight_weight.index(i)
-            print('估算出的货物重量为 %d kg. 费用大概为 %d 円.' % ((i/1000), freight_price[j]))
+            difference = i - total_weight
+            if difference > 250:
+                print('估算出的货物重量为 %.1f kg. 物流费用大概为 %d 円.' % ((i/1000), freight_price[j]))
+            else:
+                print('货物重量接近升级档位, 因此物流费用上涨为 %d 円.' % (freight_price[j+1]))
             break
 
 buy()
-freight()
