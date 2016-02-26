@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
+from openpyxl import Workbook
+import datetime
 
 def buy():
     global total_weight
     o, total_price, total_weight = 0, 0, 0
     name_list, price_list, num_list, weight_list = [], [], [], []
     while True:
-        name = input('请输入商品名称(输入q为退出): ')
-        if name == 'q': break
+        name = input('请输入商品名称: ')
         price = int(input('请输入商品单价(円): '))
         num = int(input('请输入商品数量: '))
         weight = int(input('请输入商品单个重量(g): '))
@@ -15,7 +16,7 @@ def buy():
         num_list.append(num)
         weight_list.append(weight)
         o += 1
-        choose = input('是否打印购物列表(y/N/q): ')
+        choose = input('是否打印购物列表(y/N): ')
         if choose == 'y':
             print('-'*60)
             for i in range(o):
@@ -33,7 +34,21 @@ def buy():
                           '商品估算成本价(円):', price_list[j]+round((freight_price_total*proportion)/num_list[j]))
                 print('商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight)
                 print('-'*60)
-                total_price, total_weight = 0, 0
+                if_quit = input('是否要保存退出（y/N): ')
+                if if_quit == 'y':
+                    wb = Workbook()
+                    ws = wb.active
+                    ws.title = '成本计算单'
+                    for k in range(o):
+                        proportion = weight_list[k]*num_list[k]/total_weight
+                        ws.append(['名称:', name_list[k], '数量:', num_list[k], '总价格(円):', price_list[k]*num_list[k], '总重量(g):', weight_list[k]*num_list[k], \
+                          '重量占比(%):', round(proportion*100, 1), '商品加成(円):', round((freight_price_total*proportion)/num_list[k]), \
+                          '商品估算成本价(円):', price_list[k]+round((freight_price_total*proportion)/num_list[k])])
+                    ws.append(['商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight])
+                    wb.save(r'D:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")) #时区问题
+                    break
+                else:
+                    total_price, total_weight = 0, 0
             else:
                 name_list.pop(delete)
                 num_list.pop(delete)
@@ -41,7 +56,6 @@ def buy():
                 weight_list.pop(delete)
                 o -= 1
                 total_price, total_weight = 0, 0
-        elif choose == 'q': break
         else: continue
 
 def freight():
