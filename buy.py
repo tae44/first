@@ -17,7 +17,7 @@ def buy():
         o += 1
         choose = input('是否打印购物列表(y/N/q): ')
         if choose == 'y':
-            print('-'*50)
+            print('-'*60)
             for i in range(o):
                 total_price += price_list[i]*num_list[i]
                 total_weight += weight_list[i]*num_list[i]
@@ -25,13 +25,14 @@ def buy():
             freight()
             delete = int(input('是否删除某一行(输入-1不删除任何数据并显示详细情况): '))
             if delete == -1:
-                print('-'*50)
+                print('-'*60)
                 for j in range(o):
-                    proportion = round(weight_list[j]*num_list[j]/total_weight, 3)
+                    proportion = weight_list[j]*num_list[j]/total_weight
                     print(j, '名称:', name_list[j], '数量:', num_list[j], '总价格(円):', price_list[j]*num_list[j], '总重量(g):', weight_list[j]*num_list[j], \
-                          '重量占比(%):', proportion*100, '商品加成(円):', round((freight_price_total*proportion)/num_list[j]), \
+                          '重量占比(%):', round(proportion*100, 1), '商品加成(円):', round((freight_price_total*proportion)/num_list[j]), \
                           '商品估算成本价(円):', price_list[j]+round((freight_price_total*proportion)/num_list[j]))
                 print('商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight)
+                print('-'*60)
                 total_price, total_weight = 0, 0
             else:
                 name_list.pop(delete)
