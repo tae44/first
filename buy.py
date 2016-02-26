@@ -2,10 +2,9 @@
 
 def buy():
     global total_weight
-    q = True
     o, total_price, total_weight = 0, 0, 0
     name_list, price_list, num_list, weight_list = [], [], [], []
-    while q:
+    while True:
         name = input('请输入商品名称(输入q为退出): ')
         if name == 'q': break
         price = int(input('请输入商品单价(円): '))
@@ -30,11 +29,10 @@ def buy():
                 for j in range(o):
                     proportion = round(weight_list[j]*num_list[j]/total_weight, 3)
                     print(j, '名称:', name_list[j], '数量:', num_list[j], '总价格(円):', price_list[j]*num_list[j], '总重量(g):', weight_list[j]*num_list[j], \
-                          '重量占比(%):', proportion, '物流加成(円):', round(freight_price_total*proportion), \
-                          '每个商品加成(円):', round((freight_price_total*proportion)/num_list[j]))
+                          '重量占比(%):', proportion*100, '商品加成(円):', round((freight_price_total*proportion)/num_list[j]), \
+                          '商品估算成本价(円):', price_list[j]+round((freight_price_total*proportion)/num_list[j]))
                 print('商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight)
                 total_price, total_weight = 0, 0
-                continue
             else:
                 name_list.pop(delete)
                 num_list.pop(delete)
@@ -42,10 +40,8 @@ def buy():
                 weight_list.pop(delete)
                 o -= 1
                 total_price, total_weight = 0, 0
-        elif choose == 'q':
-            q = False
-        else:
-            continue
+        elif choose == 'q': break
+        else: continue
 
 def freight():
     global freight_price_total
