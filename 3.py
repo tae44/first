@@ -5,12 +5,15 @@ from functools import partial
 
 def find(li1,li2):
     ret = li1
-    result = {}
+    result, t3, t4 = {}, [], []
     for i,v in enumerate(ret):
         if li2[0] == v:
-            print('3 index is {}'.format(i))
+            t3.append(i)
         if li2[1] == v:
-            print('4 index is {}'.format(i))
+            t4.append(i)
+    result[li2[0]]=t3
+    result[li2[1]]=t4
+    print(result)
 
 f = partial(find,li2=[3,4])
 f([1,2,3,1,9,6,5,4,3,0,8,4,1])
