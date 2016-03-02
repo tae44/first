@@ -45,7 +45,7 @@ def buy():
                           '重量占比(%):', round(proportion*100, 1), '商品加成(円):', round((freight_price_total*proportion)/num_list[k]), \
                           '商品估算成本价(円):', price_list[k]+round((freight_price_total*proportion)/num_list[k])])
                     ws.append(['商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight])
-                    wb.save(r'D:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")) #时区问题
+                    wb.save(r'E:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")) #时区问题
                     break
                 else:
                     total_price, total_weight = 0, 0
