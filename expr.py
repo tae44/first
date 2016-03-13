@@ -1,13 +1,12 @@
 from stack import Stack
 
 func_map = {
-    '+': lambda x, y: x+y,
-    '*': lambda x, y: x*y,
-    '/': lambda x, y: x/y,
-    '-': lambda x, y: x-y
+    '+': lambda x, y: x + y,
+    '-': lambda x, y: x - y,
+    '*': lambda x, y: x * y,
+    '/': lambda x, y: x / y
 }
 
-# (3 + 4) * 5 / ((2+3) *3)
 def cacl(expr):
     stack = Stack()
     for c in expr:
@@ -16,9 +15,13 @@ def cacl(expr):
         elif c.strip() == '':
             pass
         else:
+            if stack.top is None:
+                c = int(c)
+                stack.push(c)
+                continue
             if c != ')':
                 c = int(c)
-                if stack.top.value in '+-/*':
+                if stack.top.value in '+-*/':
                     s = stack.pop()
                     if not isinstance(stack.top.value, (int, float)):
                         raise Exception('wrong expr')
@@ -41,19 +44,23 @@ def cacl(expr):
         c = stack.pop()
         if not isinstance(c, (int, float)):
             raise Exception('wrong expr')
-        if stack.top.value in '+-/*':
-            s = stack.pop()
-            if not isinstance(stack.top.value, (int, float)):
-                raise Exception('wrong expr')
-            v = stack.pop()
-            v = func_map[s](v, c)
-            if stack.top is None:
-                return v
-            stack.push(v)
+        if stack.top is None:
+            return c
         else:
-            raise Exception('wrong expr')
+            if stack.top.value in '+-*/':
+                s = stack.pop()
+                if not isinstance(stack.top.value, (int, float)):
+                    raise Exception('wrong expr')
+                v = stack.pop()
+                v = func_map[s](v, c)
+                if stack.top is None:
+                    return v
+                stack.push(v)
+            else:
+                raise Exception('wrong expr')
 
 if __name__ == '__main__':
-    print(cacl('(3 + 4) * 5 / ((2+3) *3)'))
+    #print(cacl('(3 + 4) * 5 / ((2 + 3) * 3)'))
+    print(cacl('3+4*5'))
 
-#TODO 实现带优先级的算术表达式解析
+# TODO 运算优先级问题

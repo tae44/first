@@ -18,10 +18,9 @@ class Stack:
         self.top = node.next
         return node.value
 
-
 if __name__ == '__main__':
     stack = Stack()
-    exp = '({a * [x/(x+y)]}'
+    exp = '({a * [x/(x+y)]})'
     for c in exp:
         if c in '{[(':
             stack.push(c)
