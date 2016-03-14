@@ -5,6 +5,11 @@
 from stack import Stack
 # '(#abc# & #324#) | (!#def# & #789#)'
 
+def module(v, s, v2):
+    if not isinstance(v2, bool): raise Exception('wrong expr')
+    if s == '&': v = v and v2
+    else: v = v or v2
+
 def match(exprs, line, fn):
     stack = Stack()
     is_expr = False
@@ -60,7 +65,7 @@ def match(exprs, line, fn):
                     if s == '!':
                         v = not v
                         s = stack.pop()
-                    if s == '(':
+                    elif s == '(':
                         stack.push(v)
                     else:
                         raise Exception('wrong expr')
@@ -75,16 +80,18 @@ def match(exprs, line, fn):
         if s == '!':
             v = not v
             s = stack.pop()
-        if s == '&':
+        elif s == '&':
             v2 = stack.pop()
-            if not isinstance(v2, bool):
-                raise Exception('wrong expr')
-            v = v and v2
+            module(v, s, v2)
+            # if not isinstance(v2, bool):
+            #     raise Exception('wrong expr')
+            # v = v and v2
         elif s == '|':
             v2 = stack.pop()
-            if not isinstance(v2, bool):
-                raise Exception('wrong expr')
-            v = v or v2
+            module(v, s, v2)
+            # if not isinstance(v2, bool):
+            #     raise Exception('wrong expr')
+            # v = v or v2
         else:
             raise Exception('wrong expr')
         if stack.top is None:
@@ -95,7 +102,7 @@ def match(exprs, line, fn):
 if __name__ == '__main__':
     import re
     line = 'abc 123 def 456 asd 789'
-    exprs = '(#abc# & #324#) | (!#def# & #789#)' # False
+    exprs = '(#abc# & #324#) | (!#def# & #789#)'
 
     def callback(line, expr):
         return re.match(expr, line) is not None

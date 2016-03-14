@@ -88,6 +88,7 @@ if __name__ == '__main__':
     a.add_right(c)
 
     from functools import partial
+
     p = partial(print, end='')
     a.visit_first(p)
     print()
@@ -98,3 +99,11 @@ if __name__ == '__main__':
     a.visit_last(p)
     print()
     a.visit_level(p)
+
+    #TODO 中序、后序便利的非第归方法
+
+    # ABDECFG first
+    # DBEAFCG middle
+    # DEBFGCA last
+
+    # ABCDEFG

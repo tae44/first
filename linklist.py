@@ -5,6 +5,8 @@ class Node:
 
 
 class LinkedList:
+    num = 0
+
     def __init__(self):
         self.head = None
         self.tail = None
@@ -14,9 +16,11 @@ class LinkedList:
         if self.head is None:
             self.head = node
             self.tail = node
+            self.num += 1
         else:
             self.tail.next = node
             self.tail = node
+            self.num += 1
 
     def iter(self):
         if not self.head:
@@ -38,6 +42,7 @@ class LinkedList:
         node = Node(value)
         node.next = cur.next
         cur.next = node
+        self.num += 1
         if node.next is None:
             self.tail = node
 
@@ -50,19 +55,31 @@ class LinkedList:
                 raise Exception('list length less than index')
             cur_idx += 1
         cur.next = cur.next.next
+        self.num -= 1
         if cur.next is None:
             self.tail = cur
+
+    def __len__(self):
+        return self.num
+
 
 if __name__ == '__main__':
     linked_list = LinkedList()
     for i in range(10):
         linked_list.append(i)
-    # linked_list.insert(3, 30)
-    #
-    # linked_list.remove(4)
+    linked_list.insert(3, 30)
+    linked_list.insert(3, 40)
+    linked_list.insert(10, 50)
 
-    for node in linked_list.iter():
-       print(node)
+    linked_list.remove(4)
+    linked_list.remove(4)
+    linked_list.remove(4)
+    linked_list.remove(4)
+    linked_list.remove(4)
+
+    #for node in linked_list.iter():
+    #  print(node)
+
+    print(len(linked_list))
 
 #TODO 判空
-#TODO 实现 __len__
