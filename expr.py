@@ -61,6 +61,6 @@ def cacl(expr):
 
 if __name__ == '__main__':
     #print(cacl('(3 + 4) * 5 / ((2 + 3) * 3)'))
-    print(cacl('3+4*5'))
+    print(cacl('3+4*5*2'))
 
 # TODO 运算优先级问题
