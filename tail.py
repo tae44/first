@@ -7,20 +7,49 @@
 #     d.reverse()
 #     for x in range(int(command[2])):print(d[x])
 
-import time, os
+import time
 
-filename = '/Users/a123/Desktop/456.txt'
-file = open(filename,'r')
+def tail(list=[], pos=None):
+    while True:
+        list = []
+        with open('/Users/a123/Desktop/456.txt') as f:
+            [list.append(x) for x in f.readlines()]
+            list.reverse()
+            pos = f.tell()
+            return list, pos
 
-st_size = os.stat(filename)[6]
-file.seek(st_size)
+while True:
+    l1, p1 = tail()
+    time.sleep(0.1)
+    l2, p2 = tail()
+    if p1 > p2: print(l1[0])
+    elif p1 < p2: print(l2[0])
+    else: continue
 
-while 1:
-    where = file.tell()
-    line = file.readline()
-    if not line:
-        time.sleep(1)
-        file.seek(where)
-    else:
-        if 'article' in line:
-            print(line,)
+# def r1():
+#     while True:
+#         d = []
+#         with open('/Users/a123/Desktop/456.txt') as f:
+#             [d.append(x) for x in f.readlines()]
+#             d.reverse()
+#             pos = f.tell()
+#             return d[0], pos
+# def r2():
+#     while True:
+#         d = []
+#         with open('/Users/a123/Desktop/456.txt') as f:
+#             [d.append(x) for x in f.readlines()]
+#             d.reverse()
+#             pos = f.tell()
+#             return d[0], pos
+#
+# while True:
+#     d1, pos1 = r1()
+#     time.sleep(0.1)
+#     d2, pos2 = r2()
+#     if pos1 == pos2: continue
+#     else:
+#         if pos1 > pos2:
+#             print(d1)
+#         else:
+#             print(d2)
