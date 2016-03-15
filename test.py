@@ -36,6 +36,10 @@ def cacl(expr):
                             raise Exception('wrong expr')
                         v = stack.pop()
                         v = func_map[s](v, c)
+                        if stack.top.value in '*/':
+                            s = stack.pop()
+                            v2 = stack.pop()
+                            v = func_map[s](v2, v)
                         stack.push(v)
                     else:
                         stack.push(c)
@@ -70,4 +74,4 @@ def cacl(expr):
 
 if __name__ == '__main__':
     #print(cacl('(3 + 4) * 5 / ((2 + 3) * 3)'))
-    print(cacl('3+4*5*6-2-2*2*3/2'))
+    print(cacl('3+4*5*6-3-2*5'))
