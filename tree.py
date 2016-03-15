@@ -60,15 +60,7 @@ class Tree:
                 stack.push(p.left)
 
     def iter_visit_middle(self, fn):
-        stack = Stack()
-        stack.push(self)
-        while stack.top:
-            p = stack.pop()
-            if p.right:
-                stack.push(p.right)
-            fn(p.root.value)
-            if p.left:
-                stack.push(p.left)
+        pass
 
     def iter_visit_last(self, fn):
         pass
@@ -112,8 +104,8 @@ if __name__ == '__main__':
     print()
     a.iter_visit_middle(p)
     print()
-    # a.visit_last(p)
-    # print()
+    a.visit_last(p)
+    print()
     #a.visit_level(p)
 
     #TODO 中序、后序便利的非第归方法

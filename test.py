@@ -74,4 +74,4 @@ def cacl(expr):
 
 if __name__ == '__main__':
     #print(cacl('(3 + 4) * 5 / ((2 + 3) * 3)'))
-    print(cacl('3+4*5*6-3-2*5'))
+    #print(cacl('3+4*5*6-3-2*5-9'))
