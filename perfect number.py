@@ -7,7 +7,5 @@ def fn(p):
             ret.append(i)
     if sum(ret) == p:
         print('This num {} is perfect number.'.format(p))
-        return 123
 
-r = map(fn, range(2,1001))
-list(r)
+list(map(fn, range(2,1001)))
