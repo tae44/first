@@ -9,7 +9,9 @@ func_map = {
 
 def cacl(expr):
     stack = Stack()
-    for c in expr:
+    d = []
+    [d.append(x) for x in expr]
+    for idx, c in enumerate(expr):
         if c in '(+-*/':
             stack.push(c)
         elif c.strip() == '':
@@ -21,15 +23,26 @@ def cacl(expr):
                 continue
             if c != ')':
                 c = int(c)
-                if stack.top.value in '+-*/':
-                    s = stack.pop()
-                    if not isinstance(stack.top.value, (int, float)):
-                        raise Exception('wrong expr')
-                    v = stack.pop()
-                    v = func_map[s](v, c)
-                    stack.push(v)
-                else:
+                try:
+                    dd = d[idx+1]
+                except IndexError as e:
+                    pass
+                if dd in '*/':
                     stack.push(c)
+                else:
+                    if stack.top.value in '+-*/':
+                        s = stack.pop()
+                        if not isinstance(stack.top.value, (int, float)):
+                            raise Exception('wrong expr')
+                        v = stack.pop()
+                        v = func_map[s](v, c)
+                        if stack.top.value in '*/':
+                            s = stack.pop()
+                            v2 = stack.pop()
+                            v = func_map[s](v2, v)
+                        stack.push(v)
+                    else:
+                        stack.push(c)
             if c == ')':
                 if isinstance(stack.top.value, (int, float)):
                     v = stack.pop()
@@ -61,6 +74,4 @@ def cacl(expr):
 
 if __name__ == '__main__':
     #print(cacl('(3 + 4) * 5 / ((2 + 3) * 3)'))
-    print(cacl('3+4*5*2'))
-
-# TODO 运算优先级问题
+    #print(cacl('3+4*5*6-3-2*5-9'))
