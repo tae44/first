@@ -1,7 +1,7 @@
 class Node:
     def __init__(self, value):
-        self.value = value
-        self.next = None
+        self.value = value # 节点的值
+        self.next = None # 节点的指向游标
 
 
 class Stack:
@@ -10,13 +10,13 @@ class Stack:
 
     def push(self, value):
         node = Node(value)
-        node.next = self.top
-        self.top = node
+        node.next = self.top # 节点的游标指向之前的栈顶
+        self.top = node # 自己变成栈顶
 
     def pop(self):
         node = self.top
-        self.top = node.next
-        return node.value
+        self.top = node.next # 栈顶游标指向下一个数据节点
+        return node.value # 最上层的弹出
 
 if __name__ == '__main__':
     stack = Stack()

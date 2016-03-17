@@ -1,2 +1,21 @@
-# 题目：请输入星期几的第一个字母来判断一下是星期几，如果第一个字母一样，则继续判断第二个字母。
+class Node:
+    def __init__(self, data):
+        self.data = data
+        self.next = None
 
+class Linkedlist:
+    def __init__(self):
+        self.head = None
+        self.tail = None
+
+    def append(self, value):
+        pass
+
+    def iter(self):
+        pass
+
+    def insert(self, idx, value):
+        pass
+
+    def remove(self, idx):
+        pass
