@@ -13,5 +13,5 @@ if __name__ == '__main__':
     t = threading.Thread(target=worker, name='worker')
     t.daemon = True
     t.start()
-    t.join()
+    t.join() # 没有join的话主线程会不等子线程直接返回
     logging.debug('main thread exiting')

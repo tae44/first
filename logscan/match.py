@@ -1,5 +1,5 @@
 import re
-from queue import Queue
+from queue1 import Queue
 
 class Token:
     LEFT_BRACKETS = 'LEFT_BRACKETS'

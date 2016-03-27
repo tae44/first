@@ -1,5 +1,5 @@
 from stack import Stack
-from queue import Queue
+from queue1 import Queue
 
 
 class Node:
