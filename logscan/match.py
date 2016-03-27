@@ -1,5 +1,5 @@
 import re
-from queue1 import Queue
+from queue import Queue
 
 class Token:
     LEFT_BRACKETS = 'LEFT_BRACKETS'
@@ -129,6 +129,8 @@ class Matcher:
 if __name__ == '__main__':
     e = '#test# & #abc# |(!#asd# | #456#)'
     s = 'test cdf asd 568'
-
-    m = Matcher(e)
-    print(m.match(s))
+    # print(tokenize(e))
+    # m = Matcher(e)
+    # print(m.match(s))
+    ast = make_ast(tokenize(e))
+    print(ast.visit())
