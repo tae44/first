@@ -1,5 +1,6 @@
 import re
-from queue import Queue
+from queue import Queue, Full
+
 
 class Token:
     LEFT_BRACKETS = 'LEFT_BRACKETS'
@@ -99,7 +100,7 @@ def make_ast(tokens):
                                                                                   Token.EXPRESSION, sub_tree))
             tmp = stack.pop()
             if tmp.root.type != Token.LEFT_BRACKETS:
-                raise Exception('paser error, excepted {0} but {1}'.format(Token.LEFT_BRACKETS, tmp))
+                raise Exception('parse error, excepted {0} but {1}'.format(Token.LEFT_BRACKETS, tmp))
             make_sub_ast(stack, sub_tree)
     return stack.pop()
 
@@ -124,13 +125,3 @@ class Matcher:
 
     def match(self, line):
         return cacl(self.ast, line)
-
-
-if __name__ == '__main__':
-    e = '#test# & #abc# |(!#asd# | #456#)'
-    s = 'test cdf asd 568'
-    # print(tokenize(e))
-    # m = Matcher(e)
-    # print(m.match(s))
-    ast = make_ast(tokenize(e))
-    print(ast.visit())
