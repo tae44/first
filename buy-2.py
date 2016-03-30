@@ -4,6 +4,7 @@ from openpyxl import Workbook
 import datetime
 import string
 from functools import wraps
+import ntpath
 
 def type_1(fn):
     @wraps(fn)
@@ -86,9 +87,13 @@ class Buy:
     def save_excel(self):
         save_position = input('要保存到哪个盘符下: ')
         if save_position in string.ascii_letters:
-            self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
-            sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
-                                                        datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+            if ntpath.isdir(r'{0}:'.format(save_position)):
+                self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+                sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
+                                                            datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+            else:
+                print('该盘符不存在!')
+                self.save_excel()
         else:
             raise ValueError('请输入一个字母!')
 
