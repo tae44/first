@@ -2,14 +2,26 @@
 import sys
 from openpyxl import Workbook
 import datetime
+import string
+from functools import wraps
 
-
-def type(fn):
+def type_1(fn):
+    @wraps(fn)
     def wrap(*args, **kwargs):
         try:
             fn(*args, **kwargs)
         except ValueError:
-            print('请输入数字: ')
+            print('请输入数字! ')
+            fn(*args, **kwargs)
+    return wrap
+
+def type_2(fn):
+    @wraps(fn)
+    def wrap(*args, **kwargs):
+        try:
+            fn(*args, **kwargs)
+        except ValueError:
+            print('请输入一个字母! ')
             fn(*args, **kwargs)
     return wrap
 
@@ -22,18 +34,18 @@ class Buy:
         self.name = input('请输入商品名称: ')
         self.name_table.append(self.name)
 
-    @type
+    @type_1
     def enter_price(self):
         self.price = int(input('请输入商品价格: '))
         self.price_table.append(self.price)
         self.total_price.append(self.price * self.number)
 
-    @type
+    @type_1
     def enter_number(self):
         self.number = int(input('请输入购买数量: '))
         self.number_table.append(self.number)
 
-    @type
+    @type_1
     def enter_weight(self):
         self.weight = int(input('请输入商品重量: '))
         self.weight_table.append(self.weight)
@@ -52,12 +64,13 @@ class Buy:
         self.ws.append(['名称:', '总价格(円):', '总重量(g):', '重量占比(%):', '单个商品加成(円):', '单个商品估算成本价(円):'])
         print('名称', '\t', '总价格', '\t', '总重量', '\t', '重量占比', '\t', '商品加成', '\t', '商品估算成本')
         for i in range(len(self.name_table)):
-            tmp_weight = round(self.total_weight[i]/sum(self.total_weight)*100, 2)
+            tmp_weight = round(self.total_weight[i] / sum(self.total_weight) * 100, 2)
+            tmp_freight = round(tmp_weight * freight_price / 100, 2)
             print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}\t\t{5}'.
                 format(self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
-                       freight_price*tmp_weight/100, self.price_table[i]+freight_price*tmp_weight/100))
+                       tmp_freight, self.price_table[i]+tmp_freight))
             self.ws.append([self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
-                           freight_price*tmp_weight/100, self.price_table[i]+freight_price*tmp_weight/100])
+                           tmp_freight, self.price_table[i]+tmp_freight])
         print('-' * 30)
         print('总价值: {0}      总重量: {1}'.format(sum(self.total_price),sum(self.total_weight)))
 
@@ -69,9 +82,15 @@ class Buy:
         self.total_weight.pop(i)
         self.total_price.pop(i)
 
+    @type_2
     def save_excel(self):
-        self.wb.save(r'E:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M"))
-        sys.exit('exit...')
+        save_position = input('要保存到哪个盘符下: ')
+        if save_position in string.ascii_letters:
+            self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+            sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
+                                                        datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+        else:
+            raise ValueError('请输入一个字母!')
 
 
 class Japen(Buy):
@@ -92,7 +111,7 @@ class Japen(Buy):
         else:
             self.enter_data()
 
-    @type
+    @type_1
     def if_del(self):
         del_choose = input('是否删除某一行(y/N): ')
         if del_choose == 'y':
@@ -108,16 +127,22 @@ class Japen(Buy):
                      4950, 5150, 5350, 5550, 5750, 5950, 6150, 6350, 6550, 6750, 6950, 7150, 7350]
         for i, v in enumerate(freight_weight):
             if sum(self.total_weight) < v:
-                print('此批货物估算重量为{0}g,运费估算为{1}円.'.format(v, freight_price[i]))
-                break
-        super(Japen, self).print_detailed_table(freight_price[i])
+                if v - sum(self.total_weight) > 250:
+                    tmp_freight_price = freight_price[i]
+                    print('此批货物估算重量为{0}g,运费估算为{1}円.'.format(v, tmp_freight_price))
+                    break
+                else:
+                    tmp_freight_price = freight_price[i+1]
+                    print('此批货物估算重量为{0}g,接近档位上限,因此运费上调为{1}円.'.format(v, tmp_freight_price))
+                    break
+        super(Japen, self).print_detailed_table(tmp_freight_price)
         if_quit = input('是否保存并退出(y/N): ')
         if if_quit == 'y':
             super(Japen, self).save_excel()
         else:
             self.enter_data()
 
-
-j = Japen()
-while True:
-    j.enter_data()
+if __name__ == '__main__':
+    j = Japen()
+    while True:
+        j.enter_data()
