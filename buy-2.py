@@ -2,29 +2,18 @@
 import sys
 from openpyxl import Workbook
 import datetime
-import string
 from functools import wraps
 import ntpath
 
-def type_1(fn):
+def type_num(fn):
     @wraps(fn)
     def wrap(*args, **kwargs):
         try:
             fn(*args, **kwargs)
         except ValueError:
-            print('请输入数字! ')
+            print('请输入数字!')
             fn(*args, **kwargs)
     return wrap
-
-# def type_2(fn):
-#     @wraps(fn)
-#     def wrap(*args, **kwargs):
-#         try:
-#             fn(*args, **kwargs)
-#         except ValueError:
-#             print('请输入一个字母! ')
-#             fn(*args, **kwargs)
-#     return wrap
 
 
 class Buy:
@@ -35,18 +24,18 @@ class Buy:
         self.name = input('请输入商品名称: ')
         self.name_table.append(self.name)
 
-    @type_1
+    @type_num
     def enter_price(self):
         self.price = int(input('请输入商品价格: '))
         self.price_table.append(self.price)
         self.total_price.append(self.price * self.number)
 
-    @type_1
+    @type_num
     def enter_number(self):
         self.number = int(input('请输入购买数量: '))
         self.number_table.append(self.number)
 
-    @type_1
+    @type_num
     def enter_weight(self):
         self.weight = int(input('请输入商品重量: '))
         self.weight_table.append(self.weight)
@@ -71,7 +60,7 @@ class Buy:
                 format(self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
                        tmp_freight, self.price_table[i]+tmp_freight))
             self.ws.append([self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
-                           tmp_freight, self.price_table[i]+tmp_freight])
+                            tmp_freight, self.price_table[i]+tmp_freight])
         print('-' * 30)
         print('总价值: {0}      总重量: {1}'.format(sum(self.total_price),sum(self.total_weight)))
 
@@ -83,19 +72,15 @@ class Buy:
         self.total_weight.pop(i)
         self.total_price.pop(i)
 
-    #@type_2
     def save_excel(self):
         save_position = input('要保存到哪个盘符下: ')
-        #if save_position in string.ascii_letters:
-        if ntpath.isdir(r'{0}:'.format(save_position)):
+        if ntpath.isdir('{0}:'.format(save_position)):
             self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
             sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
-                                                            datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+                                                        datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
         else:
-            print('该盘符不存在!')
+            print('该盘符不存在,请重新输入!')
             self.save_excel()
-        #else:
-        #    raise ValueError('请输入一个字母!')
 
 
 class Japen(Buy):
@@ -116,7 +101,7 @@ class Japen(Buy):
         else:
             self.enter_data()
 
-    @type_1
+    @type_num
     def if_del(self):
         del_choose = input('是否删除某一行(y/N): ')
         if del_choose == 'y':
