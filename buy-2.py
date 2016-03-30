@@ -3,6 +3,7 @@ import sys
 from openpyxl import Workbook
 import datetime
 
+
 def type(fn):
     def wrap(*args, **kwargs):
         try:
@@ -11,6 +12,7 @@ def type(fn):
             print('请输入数字: ')
             fn(*args, **kwargs)
     return wrap
+
 
 class Buy:
     name_table, price_table, number_table, weight_table = [], [], [], []
@@ -43,12 +45,19 @@ class Buy:
             print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}'.
                 format(i, self.name_table[i],self.price_table[i],self.number_table[i],self.weight_table[i]))
 
-    def print_detailed_table(self):
+    def print_detailed_table(self, freight_price):
+        self.wb = Workbook()
+        self.ws = self.wb.active
+        self.ws.title = '成本计算单'
+        self.ws.append(['名称:', '总价格(円):', '总重量(g):', '重量占比(%):', '单个商品加成(円):', '单个商品估算成本价(円):'])
         print('名称', '\t', '总价格', '\t', '总重量', '\t', '重量占比', '\t', '商品加成', '\t', '商品估算成本')
         for i in range(len(self.name_table)):
+            tmp_weight = round(self.total_weight[i]/sum(self.total_weight)*100, 2)
             print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}\t\t{5}'.
-                format(self.name_table[i], self.total_price[i], self.total_weight[i], round(self.total_weight[i]/sum(self.total_weight)*100, 2),
-                       2,3))
+                format(self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
+                       freight_price*tmp_weight/100, self.price_table[i]+freight_price*tmp_weight/100))
+            self.ws.append([self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
+                           freight_price*tmp_weight/100, self.price_table[i]+freight_price*tmp_weight/100])
         print('-' * 30)
         print('总价值: {0}      总重量: {1}'.format(sum(self.total_price),sum(self.total_weight)))
 
@@ -61,17 +70,9 @@ class Buy:
         self.total_price.pop(i)
 
     def save_excel(self):
-        wb = Workbook()
-        ws = wb.active
-        ws.title = '成本计算单'
-        ws.append(['名称:', '数量:', '总价格(円):', '总重量(g):', '重量占比(%):', '商品加成(円):', '商品估算成本价(円):'])
-        # ws.append(['商品总数:', i+1, '总价值(円):', total_price, '总重量(g):', total_weight])
-        wb.save(r'E:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M"))
-
-        # TODO 保存excel
-
-    def exit_buy(self):
+        self.wb.save(r'E:\%s.xlsx' % datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M"))
         sys.exit('exit...')
+
 
 class Japen(Buy):
     def enter_data(self):
@@ -87,7 +88,6 @@ class Japen(Buy):
             super(Japen, self).print_table()
             self.if_del()
         elif print_choose == 'd':
-            super(Japen, self).print_detailed_table()
             self.weight_price()
         else:
             self.enter_data()
@@ -110,12 +110,13 @@ class Japen(Buy):
             if sum(self.total_weight) < v:
                 print('此批货物估算重量为{0}g,运费估算为{1}円.'.format(v, freight_price[i]))
                 break
+        super(Japen, self).print_detailed_table(freight_price[i])
         if_quit = input('是否保存并退出(y/N): ')
         if if_quit == 'y':
             super(Japen, self).save_excel()
-            super(Japen, self).exit_buy()
         else:
             self.enter_data()
+
 
 j = Japen()
 while True:
