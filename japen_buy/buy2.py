@@ -5,6 +5,7 @@ import datetime
 from functools import wraps
 import ntpath
 
+
 def type_num(fn):
     @wraps(fn)
     def wrap(*args, **kwargs):
@@ -89,7 +90,7 @@ class Japen(Buy):
         super(Japen, self).enter_number()
         super(Japen, self).enter_price()
         super(Japen, self).enter_weight()
-        j.if_print()
+        self.if_print()
 
     def if_print(self):
         print_choose = input('是否打印购物列表(y/N/d): ')
@@ -131,8 +132,3 @@ class Japen(Buy):
             super(Japen, self).save_excel()
         else:
             self.enter_data()
-
-if __name__ == '__main__':
-    j = Japen()
-    while True:
-        j.enter_data()
