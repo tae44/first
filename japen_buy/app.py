@@ -1,5 +1,5 @@
 from japen_buy import buy2
-from japen_buy import tornado_test
+# from japen_buy import tornado_test
 
 if __name__ == '__main__':
     # tornado_test.application.listen(8888)

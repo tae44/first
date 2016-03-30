@@ -45,8 +45,8 @@ class Buy:
     def print_table(self):
         print('序号', '\t', '名称', '\t', '价格', '\t', '数量', '\t', '重量', '\t')
         for i in range(len(self.name_table)):
-            print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}'.
-                format(i, self.name_table[i],self.price_table[i],self.number_table[i],self.weight_table[i]))
+            print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}'.format(i, self.name_table[i], self.price_table[i],
+                                                           self.number_table[i], self.weight_table[i]))
 
     def print_detailed_table(self, freight_price):
         self.wb = Workbook()
@@ -56,14 +56,14 @@ class Buy:
         print('名称', '\t', '总价格', '\t', '总重量', '\t', '重量占比', '\t', '商品加成', '\t', '商品估算成本')
         for i in range(len(self.name_table)):
             tmp_weight = round(self.total_weight[i] / sum(self.total_weight) * 100, 2)
-            tmp_freight = round(tmp_weight * freight_price / 100, 2)
-            print('{0}\t\t{1}\t\t{2}\t\t{3}\t\t{4}\t\t{5}'.
-                format(self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
-                       tmp_freight, self.price_table[i]+tmp_freight))
+            tmp_freight = round(tmp_weight * freight_price / (100 * self.number_table[i]), 2)
+            print('{0}.....{1}.....{2}.....{3}.....{4}.....{5}'.format(
+                self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
+                tmp_freight, self.price_table[i]+tmp_freight))
             self.ws.append([self.name_table[i], self.total_price[i], self.total_weight[i], tmp_weight,
                             tmp_freight, self.price_table[i]+tmp_freight])
         print('-' * 30)
-        print('总价值: {0}      总重量: {1}'.format(sum(self.total_price),sum(self.total_weight)))
+        print('总价值: {0}      总重量: {1}'.format(sum(self.total_price), sum(self.total_weight)))
 
     def delete_item(self, i):
         self.name_table.pop(i)
@@ -113,9 +113,9 @@ class Japen(Buy):
 
     def weight_price(self):
         freight_weight = [1000, 2500, 3500, 4500, 5500, 6500, 7500, 8500, 9500, 10000, 11000, 12000, 13000, 14000, 15000,
-                      16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000, 25000, 26000, 27000, 28000]
+                          16000, 17000, 18000, 19000, 20000, 21000, 22000, 23000, 24000, 25000, 26000, 27000, 28000]
         freight_price = [1500, 2000, 2250, 2500, 2750, 3000, 3250, 3500, 3750, 3750, 3950, 4150, 4350, 4550, 4750,
-                     4950, 5150, 5350, 5550, 5750, 5950, 6150, 6350, 6550, 6750, 6950, 7150, 7350]
+                         4950, 5150, 5350, 5550, 5750, 5950, 6150, 6350, 6550, 6750, 6950, 7150, 7350]
         for i, v in enumerate(freight_weight):
             if sum(self.total_weight) < v:
                 if v - sum(self.total_weight) > 250:
