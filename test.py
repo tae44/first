@@ -1,3 +1,2 @@
-# 双栈队列
-
-# 环形队列
+#!/usr/bin/python
+# -*- coding: UTF-8 -*-

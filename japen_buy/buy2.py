@@ -4,6 +4,7 @@ from openpyxl import Workbook
 import datetime
 from functools import wraps
 import ntpath
+import os
 
 
 def type_num(fn):
@@ -74,14 +75,18 @@ class Buy:
         self.total_price.pop(i)
 
     def save_excel(self):
-        save_position = input('要保存到哪个盘符下: ')
-        if ntpath.isdir('{0}:'.format(save_position)):
-            self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
-            sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
-                                                        datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+        if os.name == 'posix':
+            self.wb.save('{}.xlsx'.format(datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+            sys.exit('文件已经保存为 --> {}.xlsx'.format(datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
         else:
-            print('该盘符不存在,请重新输入!')
-            self.save_excel()
+            save_position = input('要保存到哪个盘符下: ')
+            if ntpath.isdir('{}:'.format(save_position)):
+                self.wb.save(r'{0}:\{1}.xlsx'.format(save_position, datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+                sys.exit('文件已经保存到 --> {0}:\{1}.xlsx'.format(save_position,
+                                                            datetime.datetime.utcnow().strftime("%Y-%m-%d-%H-%M")))
+            else:
+                print('该盘符不存在,请重新输入!')
+                self.save_excel()
 
 
 class Japen(Buy):
