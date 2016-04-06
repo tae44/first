@@ -1,5 +1,5 @@
 import threading
-from queue1 import Queue
+from queue import Queue
 import time
 import logging
 
