@@ -1,8 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
+from collections import ChainMap
 
-record = '....................100 .......513.25 ..........'
-SHARES = slice(20, 23)
-PRICE = slice(31, 37)
-cost = int(record[SHARES]) * float(record[PRICE])
-print(cost)
+a = {'x':1, 'z':3}
+b = {'y':2, 'z':4}
+
+c = ChainMap(a, b)
+print(c['x'])
+print(c['y'])
+print(c['z'])
+print(len(c))
