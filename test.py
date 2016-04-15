@@ -1,12 +1,12 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
-from collections import ChainMap
 
-a = {'x':1, 'z':3}
-b = {'y':2, 'z':4}
+import heapq
+from itertools import chain
 
-c = ChainMap(a, b)
-print(c['x'])
-print(c['y'])
-print(c['z'])
-print(len(c))
+a = [1, 4, 7, 10]
+b = [2, 5, 6, 11]
+for c in heapq.merge(a, b):
+    print(c)
+for c in chain(a, b):
+    print(c)
